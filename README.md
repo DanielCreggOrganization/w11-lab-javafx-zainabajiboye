@@ -1,4 +1,4 @@
-# JavaFX Introduction Lab
+# JavaFX Introduction Lab: Building Modern Desktop Applications
 
 ## Table of Contents
 
@@ -11,9 +11,11 @@
 
 ## 1. Project Setup
 
+In the world of desktop application development, organization is key to creating maintainable and scalable applications. Before we dive into creating JavaFX applications, let's first understand how to structure our project effectively.
+
 ### 1.1 Project Structure
 
-In JavaFX development, organizing your code properly is essential for maintaining a clean and scalable application. A well-structured JavaFX project typically includes separate directories for views, controllers, models, and resources like CSS files and images.
+A well-organized JavaFX project follows a structure that separates different concerns of our application. Think of it like organizing a theater production: we need dedicated spaces for our scripts (our code), costumes and props (our resources), and stage directions (our controllers). Here's how we organize these elements:
 
 ```mermaid
 graph TD
@@ -24,12 +26,25 @@ graph TD
     B --> F[models]
     C --> G[css]
     C --> H[images]
+    D --> I[FXML files]
+    E --> J[Control logic]
+    F --> K[Data classes]
 ```
+
+The structure above helps us maintain the Model-View-Controller (MVC) pattern, a proven approach for creating maintainable applications. Each directory serves a specific purpose:
+- `views`: Contains our user interface files
+- `controllers`: Houses the logic that responds to user actions
+- `models`: Stores our data structures and business logic
+- `resources`: Holds static files like images and stylesheets
 
 ### 1.2 DIY Task 1: Create Project Structure
 
+Let's set up our JavaFX project step by step. We'll create a clean, organized structure that will serve as the foundation for our application development.
+
+Follow these steps:
+
 1. Create a package named `ie.atu.javafx`
-2. Create a Main class with this starter code:
+2. Create a Main class in this package with the following starter code:
 
 ```java
 package ie.atu.javafx;
@@ -41,7 +56,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        // We'll add our JavaFX code here
+        // This method is where we'll begin building our UI
         System.out.println("JavaFX Application Started");
     }
 
@@ -51,7 +66,12 @@ public class Main extends Application {
 }
 ```
 
-3. Run this code to verify your JavaFX setup is working correctly.
+When you run this code, you should see:
+```
+JavaFX Application Started
+```
+
+3. Run this code to verify your JavaFX setup is working correctly. You should see the output below, confirming that your development environment is properly configured:
 
 <details>
 <summary>Click to reveal expected output</summary>
@@ -61,327 +81,311 @@ JavaFX Application Started
 ```
 </details>
 
-## 2. Understanding JavaFX Fundamentals
+4. Create a `resources` folder at the same level as your src folder. This folder will be used later to store our application resources such as images, CSS files, and other assets.
 
-### 2.1 Concept Introduction: Stage, Scene, and Scene Graph
+Your project structure should now look like this:
 
-JavaFX follows a theater metaphor for its visual components, which creates an intuitive mental model for understanding how different parts work together:
-
-1. **Stage**: Think of this as the actual window of your application - like a theater stage where everything happens. It's the top-level container that provides the space where your application's content will be displayed.
-
-2. **Scene**: This is what's currently being displayed on the stage - like a scene in a play. A stage can show different scenes, but only one at a time. The scene contains all the visual elements that make up your user interface.
-
-3. **Scene Graph**: This is the hierarchical tree structure that represents all visual elements in your application. At the top is a root node, which can contain other nodes (children), creating a branching structure similar to a family tree. The scene graph determines how elements are organized, displayed, and manipulated.
-
-4. **Nodes**: These are the individual elements in your scene - like actors and props on a stage. They can be:
-   - Controls (Button, Label, TextField)
-   - Containers (HBox, VBox, GridPane)
-   - Shapes (Rectangle, Circle)
-   - Custom components
-   
-```mermaid
-graph TD
-    A[Stage] --> B[Scene]
-    B --> C[Root Node: VBox]
-    C --> D[MenuBar]
-    D --> E[File Menu]
-    D --> F[Edit Menu]
-    C --> G[Content Area: GridPane]
-    G --> H[Label]
-    G --> I[TextField]
-    G --> J[Button]
-    E --> K[New]
-    E --> L[Open]
-    E --> M[Save]
+```
+YourProject
+├── src
+│   └── ie
+│       └── atu
+│           └── javafx
+│               └── Main.java
+└── resources
 ```
 
-The scene graph is crucial for understanding how JavaFX applications are structured. When you modify a parent node in the scene graph, those changes can affect all its children. For example, if you hide a VBox, all components inside it will become hidden as well. This hierarchical structure also influences:
-- Event handling (events bubble up through the scene graph)
-- Styling (CSS styles can cascade down to child nodes)
-- Layout (parent nodes control the positioning of their children)
-- Memory management (removing a parent node automatically removes all its children)
+While our first program doesn't show a window yet, we've laid the foundation for our application and verified that everything is working correctly. The Main class extends `Application`, which is the core class for all JavaFX applications. The `start()` method is where we'll begin building our user interface in the upcoming sections.
 
-### 2.2 Code Example: Hello World Application
+## 2. Understanding JavaFX Fundamentals
 
-Let's create our first JavaFX application that displays "Hello, JavaFX!" in a window:
+Before we start building interfaces, it's essential to understand the core concepts that make JavaFX work. Think of JavaFX as a theater production system, where different components work together to create a complete show.
+
+### 2.1 The Theater Metaphor
+
+JavaFX uses a theater metaphor that makes its structure intuitive to understand:
+
+1. **Stage (Window)**: Like a physical theater stage, this is where everything happens. In JavaFX, the Stage represents your application window.
+
+2. **Scene (Content)**: Just as a play has different scenes, a JavaFX application can have multiple scenes. Each Scene represents a complete user interface that can be displayed in your window.
+
+3. **Scene Graph**: This is your scene's hierarchy of elements, like the organization of props and actors on a stage. It's a tree-like structure where each element can contain other elements.
+
+```mermaid
+graph TD
+    A[Stage/Window] --> B[Scene]
+    B --> C[Root Node]
+    C --> D[Menu Bar]
+    C --> E[Content Area]
+    D --> F[File]
+    D --> G[Edit]
+    E --> H[Controls]
+    H --> I[Buttons]
+    H --> J[Text Fields]
+```
+
+### 2.2 Understanding Nodes
+
+In JavaFX, everything you see in your application is a node. Nodes are the building blocks of your interface, similar to how actors and props make up a theater scene. There are two main types of nodes:
+
+1. **Parent Nodes**: These can contain other nodes
+   - VBox (vertical container)
+   - HBox (horizontal container)
+   - GridPane (grid layout)
+   - StackPane (layered layout)
+
+2. **Child Nodes**: These are the actual UI elements
+   - Button
+   - Label
+   - TextField
+   - ImageView
+
+## 3. Creating Your First JavaFX Application
+
+Now that we understand the basics, let's create our first real JavaFX application. We'll start simple and gradually add more features.
+
+### 3.1 Hello JavaFX
+
+Let's create a window that displays a welcome message:
 
 ```java
-package ie.atu.javafx.demo;
-
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
-public class HelloWorld extends Application {
+public class HelloJavaFX extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        // Create a label node
-        Label label = new Label("Hello, JavaFX!");
+        // Create the main content node
+        Label welcomeLabel = new Label("Welcome to JavaFX!");
+        welcomeLabel.setStyle("-fx-font-size: 20px;");
         
-        // Create a layout pane (root node)
+        // Create a container to hold our label
         StackPane root = new StackPane();
+        root.getChildren().add(welcomeLabel);
         
-        // Add the label to the pane
-        root.getChildren().add(label);
-        
-        // Create a scene with the pane
+        // Create and configure the scene
         Scene scene = new Scene(root, 300, 200);
         
-        // Set the scene on the stage
+        // Configure and show the stage
+        primaryStage.setTitle("Hello JavaFX");
         primaryStage.setScene(scene);
-        
-        // Set the stage title
-        primaryStage.setTitle("My First JavaFX App");
-        
-        // Show the stage
         primaryStage.show();
-    }
-    
-    public static void main(String[] args) {
-        launch(args);
     }
 }
 ```
 
-### 2.3 DIY Task 2: Create a Welcome Screen
+This will create a window that looks like this:
 
-Create your own JavaFX application that:
+| Hello JavaFX                      |
+|----------------------------------|
+|                                  |
+|     Welcome to JavaFX!           |
+|                                  |
+|----------------------------------|
 
-1. Displays a welcome message
-2. Shows your name
-3. Includes the current date
-4. Has a custom window title
+Let's understand what each part does:
+1. The Label is our content - the text we want to display
+2. The StackPane is a container that centers its content
+3. The Scene holds our layout
+4. The Stage displays everything
 
-<details>
-<summary>Click to see expected result</summary>
+### 3.2 DIY Task 2: Enhanced Welcome Screen
 
-Your application should display a window with centered text showing:
-```
-Welcome to My JavaFX Application
-Created by [Your Name]
-Current Date: [Today's Date]
-```
-</details>
+Now it's your turn to create something slightly more complex. Create a welcome screen that shows:
+- A welcome message
+- The current date and time
+- Your name
+- A simple image (we'll provide a sample)
 
-## 3. Working with Layouts
+Your result should look like this:
 
-### 3.1 Concept Introduction: Layout Managers
+| Welcome to My App                 |
+|----------------------------------|
+|                                  |
+|   👋 Welcome, [Your Name]!       |
+|   📅 [Current Date]              |
+|   🕒 [Current Time]              |
+|                                  |
+|----------------------------------|
 
-JavaFX provides several layout managers to help organize your user interface components. Each layout manager has its own specific way of arranging nodes:
+## 4. Working with Layouts
+
+Layout managers in JavaFX help us organize our interface elements in a structured way. Each layout manager serves a specific purpose and understanding them is key to creating well-organized interfaces.
+
+### 4.1 Common Layout Managers
+
+JavaFX provides several layout managers, each with its own specific use case:
 
 ```mermaid
 graph TD
-    A[Layout Managers] --> B[FlowPane]
-    A --> C[GridPane]
-    A --> D[HBox]
-    A --> E[VBox]
-    A --> F[BorderPane]
-    A --> G[StackPane]
-    B --> H[Flows left to right]
-    C --> I[Grid of rows & columns]
-    D --> J[Horizontal arrangement]
-    E --> K[Vertical arrangement]
-    F --> L[5 regions: top/bottom/left/right/center]
-    G --> M[Stacks nodes on top of each other]
+    A[Layout Managers] --> B[HBox]
+    A --> C[VBox]
+    A --> D[GridPane]
+    A --> E[BorderPane]
+    B --> F[Horizontal Layout]
+    C --> G[Vertical Layout]
+    D --> H[Grid Layout]
+    E --> I[Border Layout]
 ```
 
-### 3.2 Code Example: Working with GridPane
-
-Let's create a simple login form using GridPane:
+Let's look at a practical example using GridPane to create a form:
 
 ```java
-package ie.atu.javafx.demo;
-
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
 public class LoginForm extends Application {
-    
     @Override
     public void start(Stage primaryStage) {
-        // Create a GridPane layout
+        // Create a grid layout
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        grid.setPadding(new Insets(25));
         
-        // Add components to the grid
-        Label userName = new Label("User Name:");
-        grid.add(userName, 0, 0);  // column=0, row=0
+        // Add form elements
+        Label usernameLabel = new Label("Username:");
+        grid.add(usernameLabel, 0, 0); // column 0, row 0
         
-        TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 0);  // column=1, row=0
+        TextField usernameField = new TextField();
+        grid.add(usernameField, 1, 0); // column 1, row 0
         
-        Label pw = new Label("Password:");
-        grid.add(pw, 0, 1);  // column=0, row=1
+        Label passwordLabel = new Label("Password:");
+        grid.add(passwordLabel, 0, 1); // column 0, row 1
         
-        PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 1);  // column=1, row=1
+        PasswordField passwordField = new PasswordField();
+        grid.add(passwordField, 1, 1); // column 1, row 1
         
-        Button loginBtn = new Button("Sign in");
-        grid.add(loginBtn, 1, 2);  // column=1, row=2
+        Button loginButton = new Button("Login");
+        grid.add(loginButton, 1, 2); // column 1, row 2
         
-        // Create the scene and show the stage
+        // Create scene and show
         Scene scene = new Scene(grid, 300, 200);
         primaryStage.setTitle("Login Form");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
 ```
 
-### 3.3 DIY Task 3: Registration Form
+This creates a professional-looking login form:
 
-Create a registration form that includes:
+| Login Form                        |
+|----------------------------------|
+| Username: `[________________]`    |
+| Password: `[________________]`    |
+|          `[    Login     ]`      |
+|----------------------------------|
 
-1. Fields for:
-   - First Name
-   - Last Name
-   - Email
-   - Password
-   - Confirm Password
-2. A "Register" button
-3. Proper spacing and alignment
-4. Basic validation (passwords match)
+### 4.2 DIY Task 3: Registration Form
 
-<details>
-<summary>Click to see expected layout</summary>
+Create a complete registration form using GridPane. Your form should validate input and provide feedback:
 
-Your form should look like this:
-```
-     Registration Form
-----------------------
-First Name: [        ]
-Last Name:  [        ]
-Email:      [        ]
-Password:   [        ]
-Confirm:    [        ]
+| Registration                      |
+|----------------------------------|
+| First Name: `[______________]`   |
+| Last Name:  `[______________]`   |
+| Email:      `[______________]`   |
+| Password:   `[______________]`   |
+| Confirm:    `[______________]`   |
+|                                  |
+|      `[    Register     ]`       |
+|----------------------------------|
 
-    [Register Button]
-```
-</details>
+## 5. Event Handling Basics
 
-## 4. Event Handling
+Event handling is how we make our applications interactive. Every button click, key press, or mouse movement can trigger an event that our application can respond to.
 
-### 4.1 Concept Introduction: Event Handling System
+### 5.1 Understanding Events
 
-JavaFX's event handling system is based on the event dispatch chain and bubbling. When an event occurs:
-
-1. Event is created (e.g., button click)
-2. Event travels down the scene graph (capture phase)
-3. Event reaches the target node
-4. Event bubbles back up the scene graph
+Events in JavaFX follow a specific flow:
 
 ```mermaid
-graph TD
-    A[Event Created] --> B[Capture Phase]
-    B --> C[Target Phase]
-    C --> D[Bubble Phase]
-    D --> E[Event Handled]
+graph LR
+    A[User Action] --> B[Event Created]
+    B --> C[Event Handler]
+    C --> D[Application Response]
 ```
 
-### 4.2 Code Example: Button Click Events
+Here's a simple example of event handling:
 
 ```java
-package ie.atu.javafx.demo;
-
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-public class EventDemo extends Application {
+public class Counter extends Application {
+    private int count = 0;
     
     @Override
     public void start(Stage primaryStage) {
-        VBox root = new VBox(10); // spacing = 10
-        root.setPadding(new Insets(10));
+        // Create display
+        Label countLabel = new Label("0");
         
-        Label messageLabel = new Label("Click the button!");
-        Button clickButton = new Button("Click Me");
+        // Create buttons
+        Button incrementButton = new Button("+");
+        Button decrementButton = new Button("-");
         
-        // Add event handler using lambda expression
-        clickButton.setOnAction(event -> {
-            messageLabel.setText("Button was clicked!");
+        // Add event handlers
+        incrementButton.setOnAction(e -> {
+            count++;
+            countLabel.setText(String.valueOf(count));
         });
         
-        // Alternative way using event handler class
-        clickButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                messageLabel.setText("Button was clicked!");
-            }
+        decrementButton.setOnAction(e -> {
+            count--;
+            countLabel.setText(String.valueOf(count));
         });
         
-        root.getChildren().addAll(messageLabel, clickButton);
+        // Create layout
+        HBox layout = new HBox(10);
+        layout.getChildren().addAll(decrementButton, 
+                                  countLabel, 
+                                  incrementButton);
         
-        Scene scene = new Scene(root, 200, 100);
-        primaryStage.setTitle("Event Handling Demo");
+        // Show the stage
+        Scene scene = new Scene(layout, 200, 100);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 }
 ```
 
-### 4.3 DIY Task 4: Interactive Counter
+This creates an interactive counter:
 
-Create an application with:
+| Counter                          |
+|---------------------------------|
+|    `[ - ]`    0    `[ + ]`      |
+|---------------------------------|
 
-1. A label showing a number (starting at 0)
-2. Three buttons:
-   - Increment (+)
-   - Decrement (-)
-   - Reset
-3. Update the label when buttons are clicked
-4. Add keyboard shortcuts (Up/Down arrows, R for reset)
+### 5.2 DIY Task 4: Interactive Calculator
 
-## 5. Styling and CSS
+Create a basic calculator with these features:
+- Numeric buttons (0-9)
+- Basic operations (+, -, *, /)
+- Clear button
+- Equal button
+- Running display of calculations
 
-### 5.1 CSS in JavaFX
+## 6. Styling and CSS
 
-JavaFX supports CSS styling similar to web development. You can style your applications using:
-- Inline styles
-- Style classes
-- ID selectors
-- External stylesheets
+JavaFX applications can be styled using CSS, similar to web development but with JavaFX-specific properties.
 
-### 5.2 Code Example: Styled Button
+### 6.1 Basic Styling
+
+You can style JavaFX elements in three ways:
+1. Inline styles
+2. Style classes
+3. External stylesheets
+
+Here's an example of each approach:
 
 ```java
-Button button = new Button("Styled Button");
-
-// Inline style
+// Inline styling
 button.setStyle("-fx-background-color: #4CAF50; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-size: 14px;");
+                "-fx-text-fill: white;");
 
-// Using CSS class
+// Style class
 button.getStyleClass().add("success-button");
 
-// Using CSS file
-scene.getStylesheets().add("styles/main.css");
+// External stylesheet
+scene.getStylesheets().add("styles.css");
 ```
 
 ```css
-/* styles/main.css */
+/* styles.css */
 .success-button {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
@@ -394,41 +398,41 @@ scene.getStylesheets().add("styles/main.css");
 }
 ```
 
-### 5.3 DIY Task 5: Styled Form
+### 6.2 DIY Task 5: Styled Application
 
-Style your registration form from Task 3 to include:
+Style your calculator from Task 4 to look professional:
 
-1. Custom colors for:
-   - Background
-   - Labels
-   - Input fields
-   - Button
-2. Hover effects on the button
-3. Custom fonts
-4. Proper spacing and padding
-5. External CSS file
+| Calculator                       |
+|----------------------------------|
+| `[_________________]`            |
+|                                  |
+| `[7]` `[8]` `[9]` `[÷]`         |
+| `[4]` `[5]` `[6]` `[×]`         |
+| `[1]` `[2]` `[3]` `[-]`         |
+| `[0]` `[.]` `[=]` `[+]`         |
+|----------------------------------|
 
-## Summary
+## Summary and Next Steps
 
-This lab has covered the fundamental concepts of JavaFX:
-1. Stage, Scene, and Scene Graph hierarchy
-2. Basic application structure
-3. Layout management with GridPane
-4. Event handling
-5. Styling with CSS
+Congratulations! You've learned the fundamentals of JavaFX development:
+- Project structure and organization
+- Basic concepts (Stage, Scene, Nodes)
+- Layout management
+- Event handling
+- Styling with CSS
 
-Key takeaways:
-- JavaFX uses a theater metaphor (Stage, Scene) for its components
-- The Scene Graph is crucial for understanding component hierarchy
-- Layout managers help organize UI components
-- Event handling follows a capture-bubble pattern
-- CSS can be used for styling, similar to web development
+Consider these next steps:
+1. Explore FXML for UI design
+2. Learn about properties and bindings
+3. Implement data persistence
+4. Add animations and transitions
+5. Create more complex applications
 
 ## Additional Resources
 
 1. Official JavaFX Documentation
 2. Scene Builder for visual layout design
 3. CSS Reference for JavaFX
-4. JavaFX Community Forums
+4. Community Forums and Support
 
-Good luck with your JavaFX development!
+Remember: Practice is key to mastering JavaFX development. Try creating your own applications and experimenting with different features and layouts.
