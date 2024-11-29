@@ -58,20 +58,11 @@ public class Main extends Application {
 }
 ```
 
-When you run this code, you should see:
-```
-JavaFX Application Started
-```
-
 3. Run this code to verify your JavaFX setup is working correctly. You should see the output below, confirming that your development environment is properly configured:
 
-<details>
-<summary>Click to reveal expected output</summary>
-
 ```
 JavaFX Application Started
 ```
-</details>
 
 4. Create a `resources` folder at the same level as your src folder. This folder will be used later to store our application resources such as images, CSS files, and other assets.
 
@@ -85,6 +76,7 @@ YourProject
 │           └── javafx
 │               └── Main.java
 └── resources
+    └── styles.css
 ```
 
 While our first program doesn't show a window yet, we've laid the foundation for our application and verified that everything is working correctly. The Main class extends `Application`, which is the core class for all JavaFX applications. The `start()` method is where we'll begin building our user interface in the upcoming sections.
