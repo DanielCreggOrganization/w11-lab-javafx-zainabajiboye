@@ -21,8 +21,10 @@ For this lab, we'll keep our project structure simple with just the essential fi
 
 ```mermaid
 graph TD
-    A[JavaFX Project] --> B[Main.java]
-    A --> C[styles.css]
+    A[JavaFX Project] --> B[src]
+    B --> C[ie/atu/javafx/Main.java]
+    A --> D[resources]
+    D --> E[styles.css]
 ```
 
 Our `Main.java` file will contain all the JavaFX application code - the windows, buttons, and event handlers we create. The `styles.css` file will help us make our application look polished by defining colors, fonts, and other visual properties.
