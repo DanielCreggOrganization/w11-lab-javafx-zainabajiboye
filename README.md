@@ -365,7 +365,7 @@ button.setStyle("-fx-background-color: #4CAF50; " +
 button.getStyleClass().add("success-button");
 
 // External stylesheet
-scene.getStylesheets().add("styles.css");
+scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 ```
 
 ```css
