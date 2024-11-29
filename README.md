@@ -13,29 +13,21 @@
 
 In the world of desktop application development, organization is key to creating maintainable and scalable applications. Before we dive into creating JavaFX applications, let's first understand how to structure our project effectively.
 
+I'll simplify the project structure section to focus just on what we need for this lab:
+
 ### 1.1 Project Structure
 
-A well-organized JavaFX project follows a structure that separates different concerns of our application. Think of it like organizing a theater production: we need dedicated spaces for our scripts (our code), costumes and props (our resources), and stage directions (our controllers). Here's how we organize these elements:
+For this lab, we'll keep our project structure simple with just the essential files. We'll have one main Java file containing all our JavaFX code and a CSS file for styling:
 
 ```mermaid
 graph TD
-    A[JavaFX Project] --> B[src]
-    A --> C[resources]
-    B --> D[views]
-    B --> E[controllers]
-    B --> F[models]
-    C --> G[css]
-    C --> H[images]
-    D --> I[FXML files]
-    E --> J[Control logic]
-    F --> K[Data classes]
+    A[JavaFX Project] --> B[Main.java]
+    A --> C[styles.css]
 ```
 
-The structure above helps us maintain the Model-View-Controller (MVC) pattern, a proven approach for creating maintainable applications. Each directory serves a specific purpose:
-- `views`: Contains our user interface files
-- `controllers`: Houses the logic that responds to user actions
-- `models`: Stores our data structures and business logic
-- `resources`: Holds static files like images and stylesheets
+Our `Main.java` file will contain all the JavaFX application code - the windows, buttons, and event handlers we create. The `styles.css` file will help us make our application look polished by defining colors, fonts, and other visual properties.
+
+Think of it like putting on a simple play: rather than having elaborate backstage organization, we have one main script (`Main.java`) and one costume design document (`styles.css`). This straightforward setup lets us focus on learning JavaFX fundamentals without getting caught up in complex project organization.
 
 ### 1.2 DIY Task 1: Create Project Structure
 
