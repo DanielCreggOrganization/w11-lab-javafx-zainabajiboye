@@ -421,4 +421,4 @@ Consider these next steps:
 3. CSS Reference for JavaFX
 4. Community Forums and Support
 
-Remember: Practice is key to mastering JavaFX development. Try creating your own applications and experimenting with different features and layouts.
+Remember: Practice is key to mastering JavaFX development. Try creating your own applications and experimenting with different features and layouts
